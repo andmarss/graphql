@@ -1,11 +1,19 @@
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
+const schema = require('./schema/schema');
+const mongoose = require('mongoose');
 
 const app = express();
 
+mongoose.connect('mongodb://andmars:secret123@ds155823.mlab.com:55823/graphql', { useNewUrlParser: true });
+mongoose.connection.once('open', () => {
+    console.log('connected');
+});
+
 // bind express with graphql
 app.use('/graphql', graphqlHTTP({
-    // pass in a schema property
+    schema,
+    graphiql: true
 }));
 
 app.listen(4000, () => {
